@@ -1,4 +1,4 @@
-#include "../include/io.hpp"
+#include "io.hpp"
 #include <stdlib.h>
 #include <fstream>
 #include <cctype>
@@ -6,20 +6,6 @@
 #include <ctype.h>
 #include <string>
 using namespace std; 
-
-/* - - - - - - - - - - File_Data implementations - - - - - - - - - - */
-
-int File_Data::Size() {
-    return size; 
-}
-
-string File_Data::Name() {
-    return name; 
-}
-
-string File_Data::Filetype() {
-    return filetype; 
-}
 
 /* - - - - - - - - - - Input publicmethod implementations - - - - - - - - - - */
 
@@ -43,18 +29,13 @@ void Input::Read(const string &filename, const string &command) {
     path = temp + "/systools/txt/";  
 
     // Pass command to OS and write outupt to filetype.txt 
-    linux = "file " + filename + " > " + path + "filetype.txt"; 
+    linux = "file " + filename + " > " + path + "filetype.txt";
     system(linux.c_str());
 
-    /* Open file and read contents into varables that correspond to output of ls -l 
-       From these varables, a vector of pointers to File_Data classes is created. This
-       vector contains the Input class' information about the files. */
-
     input_file.open((path + "filetype.txt").c_str()); 
-
     getline(input_file, temp); 
     
-    if(command == "sort") {
+    if(command == "list") {
         if(temp == filename + ": directory") {
             linux_command("list", filename, path);
             read_directory(path); 

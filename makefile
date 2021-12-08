@@ -7,11 +7,14 @@ all: $(ALL)
 clean: 
 	rm -f obj/* bin/*
 
-obj/io.o : src/io.cpp include/io.hpp
-	g++ $(CFLAGS) -c -o obj/io.o src/io.cpp 
+obj/file_data.o: lib/file_data.cpp lib/file_data.hpp
+	g++ $(CFLAGS) -c -o obj/file_data.o lib/file_data.cpp
 
-obj/main.o : src/main.cpp include/io.hpp 
-	g++ $(CFLAGS) -c -o obj/main.o src/main.cpp
+obj/io.o : lib/io.cpp lib/io.hpp lib/file_data.cpp lib/file_data.hpp
+	g++ $(CFLAGS) -c -o obj/io.o lib/io.cpp
 
-bin/systools: obj/io.o obj/main.o 
-	g++ $(CFLAGS) -o bin/systools obj/main.o obj/io.o 
+obj/tools.o : src/tools.cpp lib/io.hpp 
+	g++ $(CFLAGS) -c -o obj/tools.o src/tools.cpp
+
+bin/systools: src/systools.cpp obj/io.o obj/tools.o obj/file_data.o lib/cxxopts.hpp
+	g++ $(CFLAGS) -o bin/systools src/systools.cpp obj/tools.o obj/io.o obj/file_data.o
