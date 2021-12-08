@@ -6,22 +6,22 @@ int main(int argc, char **argv) {
     Input i;  
 
     // Program needs at least 2 arguments 
-    if(argc < 3) {
+    if(argc < 2) {
         cout << "usage: $(command) $(filename)" << endl; 
         return -1; 
     }
 
     command = argv[1]; 
-    filename = argv[2]; 
 
     /* "sort" will sort files in the given directory by either name or size */
     if(command == "sort") {
-        if(argc < 4) {
-            cout << "usage: sort $(filename) -$(key)" << endl; 
+        if(argc != 4) {
+            cout << "usage: sort -$(key) $(filename)" << endl; 
             return -1;
         }
 
-        key = argv[3]; 
+        key = argv[2]; 
+        filename = argv[3]; 
 
         i.Read(filename, command); 
         i.Sort(key); 

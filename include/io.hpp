@@ -36,7 +36,8 @@ class Input {
 
     private:
         std::vector<File_Data*> files;  
-        void read_directory(std::ifstream &input_file, const std::string &filename); 
+        void linux_command(const std::string &action, const std::string &filename, const std::string & path); 
+        void read_directory(const std::string &path); 
         void sort_size(std::vector<File_Data*> &files);
         void sort_names(std::vector<File_Data*> &files);  
 }; 
