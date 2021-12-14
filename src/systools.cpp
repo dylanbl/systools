@@ -3,8 +3,8 @@
 using namespace std; 
 
 int main(int argc, char **argv) {
-    string command, filename; 
-    Input i; 
+    string command, filename, flag;
+    Tools tools; 
 
     // Variables for cxxopts library  
     cxxopts::ParseResult result; 
@@ -29,44 +29,40 @@ int main(int argc, char **argv) {
 
     command = argv[1]; 
 
-    /* "sort" will sort files in the given directory by either name or size */
-    if(command == "list") {
-        if(argc != 4) {
-            cout << "usage: sort -$(key) $(filename)" << endl; 
-            return -1;
-        }
+    try {
+        /* "sort" will sort files in the given directory by either name or size */
+        if(command == "list") {
+            if(argc != 4) {
+                cout << "usage: sort -$(key) $(filename)" << endl; 
+                return -1;
+            }
 
-        if(result.count("size")) {
-            filename = result["size"].as<string>(); 
-            i.Read(filename, command); 
-            i.Sort("size"); 
+            if(!(result.count("size")) && !(result.count("name"))) {
+                cout << "invalid sort flag." << endl; 
+                return -1; 
+            }
+
+            flag = (result.count("size")) ? "size" : "name"; 
+            filename = result[flag].as<string>(); 
+            
+            tools.List(filename, flag); 
         }
-        else if(result.count("name")) {
-            filename = result["name"].as<string>(); 
-            i.Read(filename, command); 
-            i.Sort("name"); 
+        /*
+        else if(command == "add") {
+            if(argc != 4) {
+                cout << "usage: add $(filename1) $(filename2) $(destination)";
+            }
+            tools.i->Read(filename, command); 
+            tools.o->Standard_Print(); 
         }
-        else if(result.unmatched().size() > 0) {
-            cout << "invalid sort flag." << endl; 
+        */
+        else {
+            cout << "command not valid." << endl; 
             return -1; 
         }
-        else {
-            cout << "invalid sort flag." << endl;
-            return -1;  
-        }
-        
-        i.Print(); 
     }
-    else if(command == "add") {
-        if(argc != 4) {
-            cout << "usage: add $(filename1) $(filename2) $(destination)";
-        }
-        i.Read(filename, command); 
-        i.Print(); 
-    }
-    else {
-        cout << "command not valid." << endl; 
-        return -1; 
+    catch(const string s) {
+        cout << s << endl; 
     }
 
     return 0; 
